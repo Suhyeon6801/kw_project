@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>home</h1>
+
+    <div class="graph_box">
+        <canvas id="chart" height="100"></canvas>
+        <div><button onclick="GetChart()">draw</button></div>
+    </div>
+    <script>
+
+        const url = "api/graph/data";
+
+        function test1(){
+            console.log('hi');
+        }
+        
+        function GetChart(){
+
+            $.ajax({
+                method : "GET",
+                url : url,
+                
+
+                success:function(chartdata){
+                    labels=chartdata.x_usd;
+                    y_usd=chartdata.y_usd;
+                    x_jpy=chartdata.x_jpy;
+                    y_jpy=chartdata.y_jpy;
+
+                    PaintChart();
+                },
+                error:function(error_data){
+                    console.log("error");
+                    console.log(error_data);
+                }
+            })
+        }
+        
+
+        function PaintChart(){
+            const colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
+            const chart = document.getElementById("chart")
+
+            const chartData = {//차트데이터
+                labels: labels,
+                datasets: [
+                    {//usd
+                    label: "USD",
+                    data: y_usd,
+                    backgroundColor: 'transparent',
+                    borderColor: colors[0], //파랑
+                    borderWidth: 4,
+                    pointBackgroundColor: colors[0]
+                    },
+                    {//jpy
+                    label: "JPY",
+                    data: y_jpy,
+                    backgroundColor: colors[3],
+                    borderColor: colors[1], //초록
+                    borderWidth: 5,
+                    pointBackgroundColor: colors[1]
+                    }
+                ]
+            };
+
+
+            var myLineChart = new Chart(chart, {
+                type: 'line',
+                data: chartData,
+                options: {
+                //showLines:false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                        beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {//범례 지정하고싶다면 true
+                    display: false
+                }
+                }
+            });
+        }
+    </script>>
+{% endblock %}
