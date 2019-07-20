@@ -20,7 +20,9 @@ from myapp.views import GraphData
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',myapp.views.index, name="index"),
+    path('',myapp.views.main, name="main"),
+    path('index',myapp.views.index, name='index'),
     path('predict',myapp.views.predict, name='predict'),
+    path('story',myapp.views.story, name='story'),
     path('api/graph/data/',GraphData.as_view()),#class base view를 쓰기 때문에 사용(as_view)
 ]

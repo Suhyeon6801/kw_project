@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<h1>predict</h1>
+<br>
+<div class="container">
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            Country
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">USA</a>
+            <a class="dropdown-item" href="#">JAPAN</a>
+        </div>
+        &nbsp&nbsp&nbsp&nbsp
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            Period
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">1 Day</a>
+            <a class="dropdown-item" href="#">1 Month</a>
+        </div>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <a class="btn btn-secondary role="button">Draw Graph</a>
+    </div>
+</div>
 {% endblock %}

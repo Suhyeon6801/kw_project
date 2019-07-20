@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.utils import timezone
 
 from rest_framework.views import APIView
 
@@ -11,11 +12,20 @@ import matplotlib.pyplot as plt
 
 # Create your views here.
 
+def main(request):
+    return render(request, "main.html")
+
 def index(request):
-    return render(request, "index.html")
+    time = timezone.datetime.now()
+    return render(request, "index.html",{"time": time})
 
 def predict(request):
-    return render(request, "predict.html")
+    time = timezone.datetime.now()
+    return render(request, "predict.html",{"time": time})
+
+def story(request):
+    time = timezone.datetime.now()
+    return render(request, "story.html",{"time": time})
 
 class GraphData(APIView): #class기반 view
     def get(self, request, format=None):

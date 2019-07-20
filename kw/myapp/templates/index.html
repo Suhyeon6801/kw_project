@@ -1,11 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>home</h1>
+<style>
+    .graph_box {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+    }
 
-    <div class="graph_box">
-        <canvas id="chart" height="100"></canvas>
-        <div><button onclick="GetChart()">draw</button></div>
+</style>
+    <div class="container-fluid"> 
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><center>You can check the exchange rate of the dollar and the won for the last three months.</center></li>
+            </ol>
+        <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+             Today's Exhange Rate</div>
+            <div class="card mb-3">
+                <div class="graph_box">
+                    <canvas id="chart" height="70" width="=100%"></canvas>
+                    <!---<div><button onclick="GetChart()">오늘의 환율 가져오기</button></div>-->
+                </div>
+                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            </div>
     </div>
     <script>
 
@@ -36,7 +54,7 @@
                 }
             })
         }
-        
+        GetChart();
 
         function PaintChart(){
             const colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
@@ -56,7 +74,7 @@
                     {//jpy
                     label: "JPY",
                     data: y_jpy,
-                    backgroundColor: colors[3],
+                    backgroundColor: 'transparent',
                     borderColor: colors[1], //초록
                     borderWidth: 5,
                     pointBackgroundColor: colors[1]
@@ -85,3 +103,4 @@
         }
     </script>>
 {% endblock %}
+
