@@ -8,22 +8,40 @@
     flex: 1 1 auto;
     padding: 1.25rem;
     }
+    
+    .wrap-loading div{
+        position: fixed;
+        top:50%;
+        left:50%;
+        margin-left: -21px;
+        margin-top: -21px;
+    }
+    .display-none{
+        display: none;
+    }
+
 
 </style>
+    {% load static %}
     <div class="container-fluid"> 
         <ol class="breadcrumb">
             <li class="breadcrumb-item active"><center>You can check the exchange rate of the dollar and the won for the last three months.</center></li>
-            </ol>
+        </ol>
         <div class="card-header">
             <i class="fas fa-chart-area"></i>
              Today's Exhange Rate</div>
             <div class="card mb-3">
                 <div class="graph_box">
-                    <canvas id="chart" height="70" width="=100%"></canvas>
+                    <div class="wrap-loading display-none">
+                     <center> <img src="{% static 'stylesheets/image/spin.gif' %}" alt="Loading..."></div></center> 
+                    <!--<div class="loader"></div>-->
+                    </div><canvas id="chart" height="70" width="=100%"></canvas></div>
                     <!---<div><button onclick="GetChart()">오늘의 환율 가져오기</button></div>-->
+                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+               
             </div>
+        </div>
     </div>
     <script>
 
@@ -32,7 +50,16 @@
         function test1(){
             console.log('hi');
         }
+
+        // var _showPage=function(){
+        //     var loader=$("div.loader");
+        //     var container=$("div.container");
+        //     loader.css("display","none");
+        //     container.css("display","block");
+        // };
+
         
+
         function GetChart(){
 
             $.ajax({
@@ -45,13 +72,19 @@
                     y_usd=chartdata.y_usd;
                     x_jpy=chartdata.x_jpy;
                     y_jpy=chartdata.y_jpy;
-
+                },
+                beforeSend:function(){
+                    $('.wrap-loading').removeClass('display-none');
+                },
+                complete:function(){
+                    $('.wrap-loading').addClass('display-none');
                     PaintChart();
                 },
                 error:function(error_data){
                     console.log("error");
                     console.log(error_data);
-                }
+                },
+
             })
         }
         GetChart();
@@ -101,6 +134,8 @@
                 }
             });
         }
+        
+
     </script>>
 {% endblock %}
 
