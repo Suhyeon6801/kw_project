@@ -25,4 +25,5 @@ urlpatterns = [
     path('predict',myapp.views.predict, name='predict'),
     path('story',myapp.views.story, name='story'),
     path('api/graph/data/',GraphData.as_view()),#class base view를 쓰기 때문에 사용(as_view)
+    path("api/graph/data/usa", myapp.views.getJsonUsa, name="json_usa"),
 ]

@@ -26,6 +26,16 @@ def predict(request):
 def story(request):
     time = timezone.datetime.now()
     return render(request, "story.html",{"time": time})
+    
+def getJsonUsa(request):
+    data = open('./static/201901.json')
+    data1 = json.load(data)
+
+    print(data1)
+
+    data2 = json.dumps(data1)
+    
+    return JsonResponse(data2,safe=False)
 
 class GraphData(APIView): #class기반 view
     def get(self, request, format=None):

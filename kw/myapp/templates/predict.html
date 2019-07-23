@@ -1,27 +1,194 @@
 {% extends 'base.html' %}
 {% block content %}
+<head>
+    <style>
+    .container{
+    }
+    .content{
+        padding:2em;
+    }
+    .graph{
+        margin:0 auto;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+    }
+    </style>
+    {% load static %}
+    <!-- CORS library -->
+    <script type="text/javascript" src="{% static 'js/jquery.ajax-cross-origin.min.js' %}"></script>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js'></script>
+</head>
 <br>
 <div class="container">
-    <div class="btn-group">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-            Country
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">USA</a>
-            <a class="dropdown-item" href="#">JAPAN</a>
+    <div class="row">
+        <div class="col">
+                 
+
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Period
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">1 Day</a>
+                    <a class="dropdown-item" href="#">1 Month</a>
+                </div>
+                
         </div>
-        &nbsp&nbsp&nbsp&nbsp
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-            Period
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">1 Day</a>
-            <a class="dropdown-item" href="#">1 Month</a>
+        
+       
+    </div>
+    <div class="row content">
+        <div class="graph">
+            <canvas id="cnvs"  width="1000" height="400" style="border:1px solid black"></canvas>
+
+            <br>
+
+            <div class="btns">
+           <!-- <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>-->
+            <button class="btn btn-dark" onClick=getUsa()>Draw Graph</button>
+            </div>
         </div>
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        <a class="btn btn-secondary role="button">Draw Graph</a>
+    </div>
+      <!--using axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>  
     </div>
 </div>
+
+<script>
+    function getChartdata(){
+        date_list = [];
+
+        const today = new Date();
+
+        const d = new Date();
+        d.setMonth(d.getMonth()-3);
+
+        console.log('3개월전 :',d);
+
+        while(d<=today){
+            date_list.push(new Date(d));
+            d.setDate(d.getDate()+1);
+        }
+
+        console.log(date_list);
+
+        //여기까지 데이트리스트 만들기 완료
+
+        const promise_array = [];
+
+        for (date of date_list){
+            const y = date.getFullYear()
+            const m = date.getMonth()
+            const d = date.getDate()
+
+
+            const url = `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=3th1HecDPIc71pqYB70SvHDS5J8Cr17b&searchdate=${y}${m<10?"0"+m:m}${d}&data=AP01`
+
+            /*const res = $.ajax({
+                crossOrigin : true,
+                contentType:'application/json',
+                dataType:'json',
+                url : url,
+                success : function(data) {
+                    console.log(data);
+                    const parsed_data = JSON.parse(data)
+                    console.log(typeof(parsed_data));
+                    }
+                }
+            )*/
+
+            fetch(url,{method:'GET',mode:'cors'}).then((resps)=>resps.json()).then(function(data){
+                console.log(data);
+            }).catch(function(error){
+                console.log(error);
+            });
+        }
+
+
+        /*Promise.all(
+            promise_array.map(promise => promise.catch(()=>undefined))//못받아온게 한두개 있더라도 then을 시행하기 위해
+        ).then(function(values){
+            console.log(values);
+        }).catch(e => {
+            console.log('error occurred',e.message);
+        });*/
+    }
+
+    function getUsa(){
+        const url = 'api/graph/data/usa';
+        fetch(url).then((res)=>res.json()).then((data)=>{
+            console.log(data,typeof(data));
+            const parsed_data = JSON.parse(data);
+            console.log(typeof(parsed_data));
+
+            paintChart(parsed_data);
+            }).catch((err)=>{console.log(err);});
+    }
+
+    function paintChart(data){
+        const dates = [];
+        const values = [];
+
+        data.forEach((obj)=>{
+            dates.push(obj.date);
+            values.push(obj.value);
+        })
+
+        const colors = [
+            '#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'
+        ];
+
+        const chart = document.getElementById("cnvs");
+
+        const pointBackgroundColors = [];
+        
+        const chartData = {
+            labels: dates,
+            datasets:[
+                {
+                    label:"USD",
+                    data:values,
+                    backgroundColor: 'transparent',
+                    borderColor:colors[0],
+                    borderWidth:1,
+                    pointBackgroundColor:pointBackgroundColors,
+                    pointStyle:'rectRot',
+                    pointRadius:3,
+                    pointHoverRadius:6,
+                }
+            ]
+        }
+
+        const myChart = new Chart(chart,{
+            type: 'line',
+            data: chartData,
+            options:{
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                        beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {//범례 지정하고싶다면 true
+                    display: false
+                },
+            }
+        });
+
+        const dataLen = myChart.data.datasets[0].data.length;
+        console.log('dataLen is',dataLen);
+
+        for(let i=0;i<dataLen;i++){
+            if(i<dataLen-1){
+                pointBackgroundColors.push('#19ff03');
+            }else{
+                pointBackgroundColors.push('#030bff');
+            }
+        }
+        myChart.update();
+    }
+
+
+</script>
 {% endblock %}
