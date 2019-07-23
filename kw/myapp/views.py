@@ -42,10 +42,10 @@ class GraphData(APIView): #class기반 view
         date_list = []  # 엑스축
 
         usd_list = []  # 와이축1
-        jpy_list = []  # 와이축2
+        #jpy_list = []  # 와이축2
 
         usd_dictionary = {}  # ?
-        jpy_dictionary = {}  # ?
+        #jpy_dictionary = {}  # ?
 
         date_iterator = (
             datetime.today() - relativedelta(months=3)
@@ -87,7 +87,7 @@ class GraphData(APIView): #class기반 view
 
             if str(data) == "[]":  # data가 비었다면 (아무 정보도 가져오지 못했다면)
                 usd_list.append("No data")
-                jpy_list.append("No data")
+                #jpy_list.append("No data")
 
             else:  # 뭐든 정보를 가져왔을 경우
                 for item in data:  # 리스트 안에 있는 하나의 딕셔너리를 'item'이라는 이름으로 가져다가
@@ -96,8 +96,8 @@ class GraphData(APIView): #class기반 view
                         usd_list.append(
                             float(item["ttb"].replace(",", ""))
                         )  # ttb라는 key에 해당하는 정보를 가져오는데 ,가 있다면 공백으로 바꿔주고 float화 시켜줘서 usd_list에 마지막 요소로 추가시켜준다(append).
-                    if item["cur_unit"] == "JPY(100)":  # 일본돈도 마찬가지
-                        jpy_list.append(float(item["ttb"].replace(",", "")))
+                    #if item["cur_unit"] == "JPY(100)":  # 일본돈도 마찬가지
+                    #    jpy_list.append(float(item["ttb"].replace(",", "")))
 
                         # 참고 : ttb : Telegraphic Transfer Buying, 전신환매입율
                         # -> 은행에서 고객으로부터 외국환을 살때 적용하는 환율(고객입장에서는 팔때환율)
@@ -114,14 +114,14 @@ class GraphData(APIView): #class기반 view
             if usd_dictionary[key] == "No data":  # 만약 해당 키의 value가 "No data" 라면,
                 usd_dictionary.pop(key)  # 해당 키와 value를 dictionary에서 제거(pop)한다.
 
-        for i in range(0, len(jpy_list)):
-            jpy_dictionary[date_list[i]] = jpy_list[
-                i
-            ]  # 같은 방식으로 date를 키로 해서 jpy_list를 jpy_dictionary로 바꿔준다
+        #for i in range(0, len(jpy_list)):
+        #    jpy_dictionary[date_list[i]] = jpy_list[
+        #        i
+        #    ]  # 같은 방식으로 date를 키로 해서 jpy_list를 jpy_dictionary로 바꿔준다
 
-        for key in list(jpy_dictionary.keys()):
-            if jpy_dictionary[key] == "No data":  #  No data인 날짜(key)랑 value는
-                jpy_dictionary.pop(key)  # 빼버린다.
+        #for key in list(jpy_dictionary.keys()):
+        #    if jpy_dictionary[key] == "No data":  #  No data인 날짜(key)랑 value는
+        #        jpy_dictionary.pop(key)  # 빼버린다.
 
 
         # 본격적으로 그래프를 그리기 위해
@@ -131,13 +131,13 @@ class GraphData(APIView): #class기반 view
         y_usd = list(usd_dictionary.values())
 
         # jpy도 똑같이
-        x_jpy = list(jpy_dictionary.keys())
-        y_jpy = list(jpy_dictionary.values())
+        #x_jpy = list(jpy_dictionary.keys())
+        #y_jpy = list(jpy_dictionary.values())
 
         print('USD',y_usd)
         print('\n')
-        print('JPY',y_jpy)
+        #print('JPY',y_jpy)
 
-        chartdata={"x_usd":x_usd, "y_usd":y_usd, "x_jpy":x_jpy,"y_jpy":y_jpy}
+        chartdata={"x_usd":x_usd, "y_usd":y_usd}
 
         return JsonResponse(chartdata)
