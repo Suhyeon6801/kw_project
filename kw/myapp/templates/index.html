@@ -71,6 +71,7 @@
                 success:function(chartdata){
                     labels=chartdata.x_usd;
                     y_usd=chartdata.y_usd;
+                    today=chartdata.today;
                     //x_jpy=chartdata.x_jpy;
                     //y_jpy=chartdata.y_jpy;
                 },
@@ -87,6 +88,8 @@
                 },
 
             })
+
+            
         }
         GetChart();
 
@@ -105,6 +108,7 @@
                     borderWidth: 4,
                     pointBackgroundColor: colors[0]
                     }
+                
                     // {//jpy
                     // label: "JPY",
                     // data: y_jpy,
@@ -113,8 +117,15 @@
                     // borderWidth: 5,
                     // pointBackgroundColor: colors[1]
                     // }
-                ]
+                ],
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Custom Chart Title'
+                    }
+                }
             };
+            
 
 
             var myLineChart = new Chart(chart, {
@@ -131,7 +142,14 @@
                 },
                 legend: {//범례 지정하고싶다면 true
                     display: false
-                }
+                },
+                title: {
+                    display: true,
+                    fontSize:25,
+                    fontColor : 'red',
+                    text: "1$ = " + today
+                    }
+                
                 }
             });
         }

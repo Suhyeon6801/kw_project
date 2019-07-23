@@ -129,6 +129,7 @@ class GraphData(APIView): #class기반 view
         # value (해당 날짜의 ttb)를 y축으로 리스트화해서 저장
         x_usd = list(usd_dictionary.keys())
         y_usd = list(usd_dictionary.values())
+        today = y_usd[len(y_usd) - 1]
 
         # jpy도 똑같이
         #x_jpy = list(jpy_dictionary.keys())
@@ -138,6 +139,6 @@ class GraphData(APIView): #class기반 view
         print('\n')
         #print('JPY',y_jpy)
 
-        chartdata={"x_usd":x_usd, "y_usd":y_usd}
+        chartdata={"x_usd":x_usd, "y_usd":y_usd,"today":today}
 
         return JsonResponse(chartdata)
