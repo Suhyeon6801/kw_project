@@ -28,7 +28,27 @@ def story(request):
     return render(request, "story.html",{"time": time})
     
 def getJsonUsa(request):
-    data = open('./static/201901.json')
+    data = open('./static/7day.json')
+    data1 = json.load(data)
+
+    print(data1)
+
+    data2 = json.dumps(data1)
+    
+    return JsonResponse(data2,safe=False)
+
+def getJsonUsa15(request):
+    data = open('./static/15day.json')
+    data1 = json.load(data)
+
+    print(data1)
+
+    data2 = json.dumps(data1)
+    
+    return JsonResponse(data2,safe=False)
+
+def getJsonUsa30(request):
+    data = open('./static/30day.json')
     data1 = json.load(data)
 
     print(data1)

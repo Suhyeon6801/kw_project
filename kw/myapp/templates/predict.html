@@ -2,7 +2,10 @@
 {% block content %}
 <head>
     <style>
-    .container{
+    .btns{
+        margin:auto;
+        flex-direction:row;
+        align-items:center;
     }
     .content{
         padding:2em;
@@ -20,22 +23,19 @@
     <script src='https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js'></script>
 </head>
 <br>
-<div class="container">
+<ol class="breadcrumb">
+        <li class="breadcrumb-item active"><center>You can click the buttons below to estimate the exchange rate for 7 days, 15 days, and 30 days as of today.</center></li>
+    </ol>
+<div class="container">       
     <div class="row">
-        <div class="col">
-                 
-
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Period
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">1 Day</a>
-                    <a class="dropdown-item" href="#">1 Month</a>
-                </div>
-                
-        </div>
-        
-       
+         <div class="col">
+            <div class="btns"> 
+            <!-- <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>-->
+             <button class="btn btn-dark" onClick=getUsa()>7Days</button>
+             <button class="btn btn-dark" onClick=getUsa15()>15Days</button>
+             <button class="btn btn-dark" onClick=getUsa30()>30Days</button>
+             </div>
+        </div>    
     </div>
     <div class="row content">
         <div class="graph">
@@ -43,10 +43,14 @@
 
             <br>
 
-            <div class="btns">
-           <!-- <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>-->
-            <button class="btn btn-dark" onClick=getUsa()>Draw Graph</button>
-            </div>
+            <!-- <div class="btns">
+           <!-- <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>
+            <button class="btn btn-dark" onClick=getUsa()>7Days</button>
+            <br>
+            <button class="btn btn-dark" onClick=getUsa15()>15Days</button>
+            <br>
+            <button class="btn btn-dark" onClick=getUsa()>30Days</button>
+            </div> -->
         </div>
     </div>
       <!--using axios-->
@@ -125,6 +129,28 @@
             }).catch((err)=>{console.log(err);});
     }
 
+    function getUsa15(){
+        const url = 'api/graph/data/usa15';
+        fetch(url).then((res)=>res.json()).then((data)=>{
+            console.log(data,typeof(data));
+            const parsed_data = JSON.parse(data);
+            console.log(typeof(parsed_data));
+
+            paintChart(parsed_data);
+            }).catch((err)=>{console.log(err);});
+    }
+
+    function getUsa30(){
+        const url = 'api/graph/data/usa30';
+        fetch(url).then((res)=>res.json()).then((data)=>{
+            console.log(data,typeof(data));
+            const parsed_data = JSON.parse(data);
+            console.log(typeof(parsed_data));
+
+            paintChart(parsed_data);
+            }).catch((err)=>{console.log(err);});
+    }
+
     function paintChart(data){
         const dates = [];
         const values = [];
@@ -180,7 +206,7 @@
         console.log('dataLen is',dataLen);
 
         for(let i=0;i<dataLen;i++){
-            if(i<dataLen-1){
+            if(i==0){
                 pointBackgroundColors.push('#19ff03');
             }else{
                 pointBackgroundColors.push('#030bff');
