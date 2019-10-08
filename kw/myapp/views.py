@@ -12,16 +12,20 @@ import matplotlib.pyplot as plt
 
 # Create your views here.
 
-def main(request):
-    return render(request, "main.html")
-
 def index(request):
+    return render(request, "index.html")
+
+def today(request):
     time = timezone.datetime.now()
-    return render(request, "index.html",{"time": time})
+    return render(request, "today.html",{"time": time})
 
 def predict(request):
     time = timezone.datetime.now()
     return render(request, "predict.html",{"time": time})
+
+def verify(request):
+    time = timezone.datetime.now()
+    return render(request, "Verify.html",{"time": time})
 
 def story(request):
     time = timezone.datetime.now()
@@ -56,6 +60,17 @@ def getJsonUsa30(request):
     data2 = json.dumps(data1)
     
     return JsonResponse(data2,safe=False)
+
+def getVerfiyUsa(request):
+    data = open('./static/usa.json')
+    data1 = json.load(data)
+
+    print(data1)
+
+    data2 = json.dumps(data1)
+    
+    return JsonResponse(data2,safe=False)
+
 
 class GraphData(APIView): #class기반 view
     def get(self, request, format=None):

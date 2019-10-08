@@ -1,21 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <head>
     <style>
-    .btns{
-        margin:auto;
-        flex-direction:row;
-        align-items:center;
-    }
-    .content{
-        padding:2em;
-    }
-    .graph{
-        margin:0 auto;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-    }
+        .btns {
+            margin: auto;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .content {
+            padding: 2em;
+        }
+
+        .graph {
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
     {% load static %}
     <!-- CORS library -->
@@ -24,44 +27,21 @@
 </head>
 <br>
 <ol class="breadcrumb">
-        <li class="breadcrumb-item active"><center>You can click the buttons below to estimate the exchange rate for 7 days, 15 days, and 30 days as of today.</center></li>
-    </ol>
-<div class="container">       
-    <div class="row">
-         <div class="col">
-            <div class="btns"> 
-            <!-- <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>-->
-             <button class="btn btn-dark" onClick=getUsa()>7Days</button>
-             <button class="btn btn-dark" onClick=getUsa15()>15Days</button>
-             <button class="btn btn-dark" onClick=getUsa30()>30Days</button>
-             </div>
-        </div>    
-    </div>
+    <li class="breadcrumb-item active">
+        <center>Validate how different the predicted data is from the actual data.</center>
+    </li>
+</ol>
+<div class="container">
     <div class="row content">
         <div class="graph">
-            <canvas id="cnvs"  width="1000" height="400" style="border:1px solid black"></canvas>
+            <canvas id="cnvs" width="1000" height="400"></canvas>
 
-            <br>
-
-            <!-- <div class="btns">
-           <!-- <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>
-            <button class="btn btn-dark" onClick=getUsa()>7Days</button>
-            <br>
-            <button class="btn btn-dark" onClick=getUsa15()>15Days</button>
-            <br>
-            <button class="btn btn-dark" onClick=getUsa()>30Days</button>
-            </div> -->
         </div>
     </div>
-      <!--using axios-->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>  
-    </div>
-</div>
 
-<script>
-
-    function getUsa(){
-        const url = 'api/graph/data/usa';
+    <script>
+    function getVerfiyUsa(){
+        const url = 'api/graph/data/usa_verify';
         fetch(url).then((res)=>res.json()).then((data)=>{
             console.log(data,typeof(data));
             const parsed_data = JSON.parse(data);
@@ -71,35 +51,17 @@
             }).catch((err)=>{console.log(err);});
     }
 
-    function getUsa15(){
-        const url = 'api/graph/data/usa15';
-        fetch(url).then((res)=>res.json()).then((data)=>{
-            console.log(data,typeof(data));
-            const parsed_data = JSON.parse(data);
-            console.log(typeof(parsed_data));
-
-            paintChart(parsed_data);
-            }).catch((err)=>{console.log(err);});
-    }
-
-    function getUsa30(){
-        const url = 'api/graph/data/usa30';
-        fetch(url).then((res)=>res.json()).then((data)=>{
-            console.log(data,typeof(data));
-            const parsed_data = JSON.parse(data);
-            console.log(typeof(parsed_data));
-
-            paintChart(parsed_data);
-            }).catch((err)=>{console.log(err);});
-    }
-
+    getVerfiyUsa();
+    
     function paintChart(data){
         const dates = [];
         const values = [];
+        const values2 = [];
 
         data.forEach((obj)=>{
             dates.push(obj.date);
             values.push(obj.value);
+            values2.push(obj.value2);
         })
 
         const colors = [
@@ -114,11 +76,22 @@
             labels: dates,
             datasets:[
                 {
-                    label:"USD",
+                    label:"Real",
                     data:values,
                     backgroundColor: 'transparent',
                     borderColor:colors[0],
                     borderWidth:1,
+                    pointBackgroundColor:pointBackgroundColors,
+                    pointStyle:'rectRot',
+                    pointRadius:3,
+                    pointHoverRadius:6,
+                },
+                {
+                    label:"Predict",
+                    data:values2,
+                    backgroundColor: 'transparent',
+                    borderColor:colors[3],
+                    borderWidth:3,
                     pointBackgroundColor:pointBackgroundColors,
                     pointStyle:'rectRot',
                     pointRadius:3,

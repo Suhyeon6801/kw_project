@@ -20,12 +20,14 @@ from myapp.views import GraphData
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',myapp.views.main, name="main"),
-    path('index',myapp.views.index, name='index'),
+    path('',myapp.views.index, name="index"),
+    path('today',myapp.views.today, name='today'),
     path('predict',myapp.views.predict, name='predict'),
     path('story',myapp.views.story, name='story'),
+    path('verify',myapp.views.verify, name='verify'),
     path('api/graph/data/',GraphData.as_view()),#class base view를 쓰기 때문에 사용(as_view)
     path("api/graph/data/usa", myapp.views.getJsonUsa, name="json_usa"),
     path("api/graph/data/usa15", myapp.views.getJsonUsa15, name="json_usa15"),
     path("api/graph/data/usa30", myapp.views.getJsonUsa30, name="json_usa30"),
+    path("api/graph/data/usa_verify",myapp.views.getVerfiyUsa, name="json_usa_verify"),
 ]

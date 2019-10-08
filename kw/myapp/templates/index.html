@@ -1,160 +1,159 @@
-{% extends 'base.html' %}
 
-{% block content %}
-<style>
-    .graph_box {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    padding: 1.25rem;
-    }
-    
-    .wrap-loading div{
-        position: fixed;
-        top:50%;
-        left:50%;
-        margin-left: -21px;
-        margin-top: -21px;
-    }
-    .display-none{
-        display: none;
-    }
-
-
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
     {% load static %}
-    <div class="container-fluid"> 
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><center>You can check the exchange rate of the dollar and the won for the last three months.</center></li>
-        </ol>
-        <div class="card-header">
-            <i class="fas fa-chart-area"></i>
-             Today's Exhange Rate</div>
-            <div class="card mb-3">
-                <div class="graph_box">
-                    <div class="wrap-loading display-none">
-                     <center> <img src="{% static 'stylesheets/image/spin.gif' %}" alt="Loading..."><br>Loading...
-                    <br>Just a moment, please.</div></center> 
-                    <!--<div class="loader"></div>-->
-                    </div><canvas id="chart" height="70" width="=100%"></canvas></div>
-                    <!---<div><button onclick="GetChart()">오늘의 환율 가져오기</button></div>-->
-                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+    <!--<link rel="stylesheet" href="{% static 'stylesheets/main.css' %}">-->
+    <!--bootstrap4 cdn-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <style>
+        body {
+        font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+        font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        }
+
+        header.masthead {
+        position: relative;
+        background: url("{% static 'stylesheets/image/back.jpg' %}") no-repeat center center;
+        background-size: cover;
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+        }
+
+        header.masthead .overlay {
+        position: absolute;
+        background-color: #212529;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+        }
+
+        .features-icons {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+        }
+
+        .features-icons .features-icons-item {
+        max-width: 20rem;
+        }
+
+        .features-icons .features-icons-item .features-icons-icon {
+        height: 7rem;
+        }
+
+        .features-icons .features-icons-item .features-icons-icon i {
+        font-size: 4.5rem;
+        }
+
+        .features-icons .features-icons-item:hover .features-icons-icon i {
+        font-size: 5rem;
+        }
+
+    </style>
+</head>
+<body>   
+    <nav class="navbar navbar-light bg-light">
+         <a class="navbar-brand" href="#">
+            <img src="{% static 'stylesheets/image/logo.jpg' %}" width="200" height="40" class="d-inline-block align-top" alt="">
+        </a>
+    </nav>
+
+    <header class="masthead text-white text-center">
+        <div class="overlay"></div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 mx-auto">
+                    <h1 class="mb-5">Exchange Rate Prediction Project</h1>
                 </div>
-               
             </div>
         </div>
-    </div>
-    <script>
-
-        const url = "api/graph/data";
-
-        function test1(){
-            console.log('hi');
-        }
-
-        // var _showPage=function(){
-        //     var loader=$("div.loader");
-        //     var container=$("div.container");
-        //     loader.css("display","none");
-        //     container.css("display","block");
-        // };
-
-        
-
-        function GetChart(){
-
-            $.ajax({
-                method : "GET",
-                url : url,
-                
-
-                success:function(chartdata){
-                    labels=chartdata.x_usd;
-                    y_usd=chartdata.y_usd;
-                    today=chartdata.today;
-                    //x_jpy=chartdata.x_jpy;
-                    //y_jpy=chartdata.y_jpy;
-                },
-                beforeSend:function(){
-                    $('.wrap-loading').removeClass('display-none');
-                },
-                complete:function(){
-                    $('.wrap-loading').addClass('display-none');
-                    PaintChart();
-                },
-                error:function(error_data){
-                    console.log("error");
-                    console.log(error_data);
-                },
-
-            })
-
-            
-        }
-        GetChart();
-
-        function PaintChart(){
-            const colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
-            const chart = document.getElementById("chart")
-
-            const chartData = {//차트데이터
-                labels: labels,
-                datasets: [
-                    {//usd
-                    label: "USD",
-                    data: y_usd,
-                    backgroundColor: 'transparent',
-                    borderColor: colors[0], //파랑
-                    borderWidth: 4,
-                    pointBackgroundColor: colors[0]
-                    }
-                
-                    // {//jpy
-                    // label: "JPY",
-                    // data: y_jpy,
-                    // backgroundColor: 'transparent',
-                    // borderColor: colors[1], //초록
-                    // borderWidth: 5,
-                    // pointBackgroundColor: colors[1]
-                    // }
-                ],
-                options: {
-                    title: {
-                        display: true,
-                        text: 'Custom Chart Title'
-                    }
-                }
-            };
-            
+    </header>
 
 
-            var myLineChart = new Chart(chart, {
-                type: 'line',
-                data: chartData,
-                options: {
-                //showLines:false,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                        beginAtZero: false
-                        }
-                    }]
-                },
-                legend: {//범례 지정하고싶다면 true
-                    display: false
-                },
-                title: {
-                    display: true,
-                    fontSize:25,
-                    fontColor : 'red',
-                    text: "1$ = " + today
-                    }
-                
-                }
-            });
-        }
-        
+    <!---
+    <center>
+        <a class="btn btn-primary" href="{% url 'index' %}" role="button">Today's Exchange</a>
+        <a class="btn btn-primary" href="{% url 'predict' %}" role="button">predict</a>
+    </center>-->
 
-    </script>>
-{% endblock %}
+    <section class="features-icons bg-light text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-6 col-sm-3">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-screen-desktop m-auto text-primary">
+                                <a href="{% url 'today' %}">
+                                <img src="{% static 'stylesheets/image/exchange.png' %}" width="140" height="140" alt="" > </a>
+                            </i>
+                        </div>
+                        <br><br>
+                        <h3>Today's Exchange Rate</h3>
+                        <p class="lead mb-0">Check out today's exchange rate graph!</p>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-layers m-auto text-primary">
+                                <a href="{% url 'predict' %}">
+                                 <img src="{% static 'stylesheets/image/pre.png' %}" width="140" height="140" alt="" > </a>
+                            </i>
+                        </div>
+                        <br><br>
+                        <h3>Predict Exchange Rate</h3>
+                        <p class="lead mb-0">Check out the exchange rate prediction graph!</p>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-screen-desktop m-auto text-primary">
+                                <a href="{% url 'verify' %}">
+                                <img src="{% static 'stylesheets/image/verify.png' %}" width="140" height="140" alt="" > </a>
+                            </i>
+                        </div>
+                        <br><br>
+                        <h3>Verification</h3>
+                        <p class="lead mb-0">Check the predicted and actual data.</p>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-check m-auto text-primary">
+                                <a href="{% url 'story' %}">
+                                <img src="{% static 'stylesheets/image/team.png' %}" width="140" height="140" alt="" > </a>
+                            </i>
+                        </div>
+                        <br><br>
+                        <h3>Story about Us</h3>
+                        <p class="lead mb-0">Listen to the stories of the project members!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    {% block content %}
+
+    {% endblock %}
+</body>
+</html>
