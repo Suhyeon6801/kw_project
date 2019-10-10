@@ -44,7 +44,7 @@
             <br>
 
             <!-- <div class="btns">
-           <!-- <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>
+            <button class="btn btn-dark" onClick=getChartdata()>그래프 가져오기</button>
             <button class="btn btn-dark" onClick=getUsa()>7Days</button>
             <br>
             <button class="btn btn-dark" onClick=getUsa15()>15Days</button>
@@ -106,9 +106,12 @@
             '#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'
         ];
 
+        const len=values.length;
+
         const chart = document.getElementById("cnvs");
 
         const pointBackgroundColors = [];
+        //const labels_date=[];
         
         const chartData = {
             labels: dates,
@@ -121,11 +124,12 @@
                     borderWidth:1,
                     pointBackgroundColor:pointBackgroundColors,
                     pointStyle:'rectRot',
-                    pointRadius:3,
+                    pointRadius:4,
                     pointHoverRadius:6,
                 }
             ]
         }
+
 
         const myChart = new Chart(chart,{
             type: 'line',
@@ -141,6 +145,12 @@
                 legend: {//범례 지정하고싶다면 true
                     display: false
                 },
+                title: {
+                    display: true,
+                    fontSize:25,
+                    fontColor : 'red',
+                    text: "After "+len+" will be 1$ is " + values[len-1]
+                    }         
             }
         });
 
@@ -149,7 +159,9 @@
 
         for(let i=0;i<dataLen;i++){
             if(i==0){
-                pointBackgroundColors.push('#19ff03');
+                pointBackgroundColors.push('#FFBB00');
+            }else if(i==dataLen-1){
+                pointBackgroundColors.push('#FF0000')
             }else{
                 pointBackgroundColors.push('#030bff');
             }
