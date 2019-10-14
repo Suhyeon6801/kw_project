@@ -34,12 +34,13 @@
              <button class="btn btn-dark" onClick=getUsa()>7Days</button>
              <button class="btn btn-dark" onClick=getUsa15()>15Days</button>
              <button class="btn btn-dark" onClick=getUsa30()>30Days</button>
+
              </div>
         </div>    
     </div>
-    <div class="row content">
+
         <div class="graph">
-            <canvas id="cnvs"  width="1000" height="400" style="border:1px solid black"></canvas>
+            <canvas id="cnvs"  width="1200" height="600" ></canvas>
 
             <br>
 
@@ -52,7 +53,7 @@
             <button class="btn btn-dark" onClick=getUsa()>30Days</button>
             </div> -->
         </div>
-    </div>
+
       <!--using axios-->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>  
     </div>
@@ -149,7 +150,7 @@
                 title: {
                     display: true,
                     fontSize:25,
-                    fontColor : 'red',
+                    fontColor : '#FF3636',
                     text: "After "+len+" will be 1$ is " + values[len-1]
                     }         
             }

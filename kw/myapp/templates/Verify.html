@@ -32,9 +32,9 @@
     </li>
 </ol>
 <div class="container">
-    <div class="row content">
+    <div class="row">
         <div class="graph">
-            <canvas id="cnvs" width="1000" height="400"></canvas>
+            <canvas id="cnvs" width="1200" height="600"></canvas>
 
         </div>
     </div>
@@ -57,13 +57,13 @@
         const dates = [];
         const values = [];
         const values2 = [];
-        const values3=[];
+        const values3 = [];
 
         data.forEach((obj)=>{
             dates.push(obj.date);
-            values.push(obj.value);
-            values2.push(obj.value2);
-            values3.push(obj.value3);
+            values.push(obj.Now);
+            values2.push(obj.Single);
+            values3.push(obj.Multi);
         })
 
         const colors = [
@@ -89,7 +89,7 @@
                     pointHoverRadius:6,
                 },
                 {
-                    label:"Predict1",
+                    label:"Single",
                     data:values2,
                     backgroundColor: 'transparent',
                     borderColor:colors[3],
@@ -100,7 +100,7 @@
                     pointHoverRadius:6,
                 },
                 {
-                    label:"Predict2",
+                    label:"Mutli",
                     data:values3,
                     backgroundColor: 'transparent',
                     borderColor:'#FFBB00',
