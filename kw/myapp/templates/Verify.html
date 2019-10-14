@@ -57,11 +57,13 @@
         const dates = [];
         const values = [];
         const values2 = [];
+        const values3=[];
 
         data.forEach((obj)=>{
             dates.push(obj.date);
             values.push(obj.value);
             values2.push(obj.value2);
+            values3.push(obj.value3);
         })
 
         const colors = [
@@ -87,16 +89,28 @@
                     pointHoverRadius:6,
                 },
                 {
-                    label:"Predict",
+                    label:"Predict1",
                     data:values2,
                     backgroundColor: 'transparent',
                     borderColor:colors[3],
                     borderWidth:3,
-                    pointBackgroundColor:pointBackgroundColors,
+                    pointBackgroundColor:colors[0],
+                    pointStyle:'rectRot',
+                    pointRadius:3,
+                    pointHoverRadius:6,
+                },
+                {
+                    label:"Predict2",
+                    data:values3,
+                    backgroundColor: 'transparent',
+                    borderColor:'#FFBB00',
+                    borderWidth:3,
+                    pointBackgroundColor:'#FFBB00',
                     pointStyle:'rectRot',
                     pointRadius:3,
                     pointHoverRadius:6,
                 }
+
             ]
         }
 
@@ -112,7 +126,7 @@
                     }]
                 },
                 legend: {//범례 지정하고싶다면 true
-                    display: false
+                    display: true
                 },
             }
         });
@@ -120,13 +134,13 @@
         const dataLen = myChart.data.datasets[0].data.length;
         console.log('dataLen is',dataLen);
 
-        for(let i=0;i<dataLen;i++){
-            if(i==0){
-                pointBackgroundColors.push('#19ff03');
-            }else{
-                pointBackgroundColors.push('#030bff');
-            }
-        }
+        // for(let i=0;i<dataLen;i++){
+        //     if(i==0){
+        //         pointBackgroundColors.push('#19ff03');
+        //     }else{
+        //         pointBackgroundColors.push('#030bff');
+        //     }
+        // }
         myChart.update();
     }
 
