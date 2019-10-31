@@ -83,8 +83,8 @@ class GraphData(APIView): #class기반 view
         #jpy_dictionary = {}  # ?
 
         date_iterator = (
-            datetime.today() - relativedelta(months=3)
-        ).date()  # 지금 시간에서 3달전의 시간을 해당 변수에 저장
+            datetime.today() - relativedelta(months=1)
+        ).date()  # 지금 시간에서 1달전의 시간을 해당 변수에 저장
 
         while date_iterator != datetime.today().date():  # 같아질때까지
             date_list.append(date_iterator)  # date_list에 넣고

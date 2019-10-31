@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <head>
     <style>
@@ -35,115 +34,154 @@
     <div class="row">
         <div class="graph">
             <canvas id="cnvs" width="1200" height="600"></canvas>
-
         </div>
     </div>
 
     <script>
-    function getVerfiyUsa(){
-        const url = 'api/graph/data/usa_verify';
-        fetch(url).then((res)=>res.json()).then((data)=>{
-            console.log(data,typeof(data));
-            const parsed_data = JSON.parse(data);
-            console.log(typeof(parsed_data));
+        function getVerfiyUsa() {
+            const url = 'api/graph/data/usa_verify';
+            fetch(url).then((res) => res.json()).then((data) => {
+                console.log(data, typeof (data));
+                const parsed_data = JSON.parse(data);
+                console.log(typeof (parsed_data));
 
-            paintChart(parsed_data);
-            }).catch((err)=>{console.log(err);});
-    }
-
-    getVerfiyUsa();
-    
-    function paintChart(data){
-        const dates = [];
-        const values = [];
-        const values2 = [];
-        const values3 = [];
-
-        data.forEach((obj)=>{
-            dates.push(obj.date);
-            values.push(obj.Now);
-            values2.push(obj.Single);
-            values3.push(obj.Multi);
-        })
-
-        const colors = [
-            '#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'
-        ];
-
-        const chart = document.getElementById("cnvs");
-
-        const pointBackgroundColors = [];
-        
-        const chartData = {
-            labels: dates,
-            datasets:[
-                {
-                    label:"Real",
-                    data:values,
-                    backgroundColor: 'transparent',
-                    borderColor:'#93C9D4',
-                    borderWidth:3,
-                    pointBackgroundColor:pointBackgroundColors,
-                    pointStyle:'rectRot',
-                    pointRadius:3,
-                    pointHoverRadius:6,
-                },
-                {
-                    label:"Single",
-                    data:values2,
-                    backgroundColor: 'transparent',
-                    borderColor:'#EBE2D9',
-                    borderWidth:3,
-                    pointBackgroundColor:pointBackgroundColors,
-                    pointStyle:'rectRot',
-                    pointRadius:3,
-                    pointHoverRadius:6,
-                },
-                {
-                    label:"Mutli",
-                    data:values3,
-                    backgroundColor: 'transparent',
-                    borderColor:'#FF9763',
-                    borderWidth:3,
-                    pointBackgroundColor:'#FFBB00',
-                    pointStyle:'rectRot',
-                    pointRadius:3,
-                    pointHoverRadius:6,
-                }
-
-            ]
+                paintChart(parsed_data);
+            }).catch((err) => { console.log(err); });
         }
 
-        const myChart = new Chart(chart,{
-            type: 'line',
-            data: chartData,
-            options:{
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                        beginAtZero: false
-                        }
-                    }]
-                },
-                legend: {//범례 지정하고싶다면 true
-                    display: true
-                },
+        getVerfiyUsa();
+
+        function paintChart(data) {
+            const dates = [];
+            const values = [];
+            const values2 = [];
+            const values3 = [];
+
+            data.forEach((obj) => {
+                dates.push(obj.date);
+                values.push(obj.Now);
+                values2.push(obj.Single);
+                values3.push(obj.Multi);
+            })
+
+            const colors = [
+                '#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d'
+            ];
+
+            const chart = document.getElementById("cnvs");
+
+            const backgroundColors = [];
+            const pointStyles = [];
+
+            const chartData = {
+                labels: dates,
+                datasets: [
+                    {
+                        label:" : ",
+                        data: [values[0],values[1],values[2],values[3]],
+                        backgroundColor: 'rgb(0,0,0,0.1)',
+                    },
+                    {
+                        label: "Real",
+                        data: values,
+                        backgroundColor: 'transparent',
+                        borderColor: '#1CA392',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#1CA392',
+                        pointStyle: 'rectRot',
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                    },
+                    {
+                        label: "Single",
+                        data: values2,
+                        backgroundColor: 'transparent',
+                        borderColor: '#F15628',
+                        borderWidth: 3,
+                        pointBackgroundColor:  '#F15628',
+                        pointStyle: 'rectRot',
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                    },
+                    {
+                        label: "Mutli",
+                        data: values3,
+                        backgroundColor: 'transparent',
+                        borderColor: '#FFC81B',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#FFC81B',
+                        pointStyle: 'rectRot',
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                    }
+
+                ]
             }
-        });
 
-        const dataLen = myChart.data.datasets[0].data.length;
-        console.log('dataLen is',dataLen);
+            // var ctx = document.getElementById("LineWithLine").getContext("2d");
 
-        // for(let i=0;i<dataLen;i++){
-        //     if(i==0){
-        //         pointBackgroundColors.push('#19ff03');
-        //     }else{
-        //         pointBackgroundColors.push('#030bff');
-        //     }
-        // }
-        myChart.update();
-    }
+            // Chart.types.Line.extend({
+            //     name: "LineWithLine",
+            //     draw: function () {
+            //         Chart.types.Line.prototype.draw.apply(this, arguments);
+
+            //         var point = this.datasets[0].points[this.options.lineAtIndex]
+            //         var scale = this.scale
+
+            //         // draw line
+            //         this.chart.ctx.beginPath();
+            //         this.chart.ctx.moveTo(point.x, scale.startPoint + 24);
+            //         this.chart.ctx.strokeStyle = '#ff0000';
+            //         this.chart.ctx.lineTo(point.x, scale.endPoint);
+            //         this.chart.ctx.stroke();
+
+            //         // write TODAY
+            //         this.chart.ctx.textAlign = 'center';
+            //         this.chart.ctx.fillText("TODAY", point.x, scale.startPoint + 12);
+            //     }
+            // });
+
+            // new Chart(ctx).LineWithLine(data, {
+            //     datasetFill: false,
+            //     lineAtIndex: 2
+            // });
+
+            console.log(dates[3]);
+
+            const myChart = new Chart(chart, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: false
+                            },
+                        }]
+                    },
+                    // annotation: {
+                    //     drawTime: 'afterDatasetsDraw',
+                    //     annotations: [
+                    //         {
+                    //             drawTime:'afterDraw',
+                    //             type: "line",
+                    //             mode: "vertical",
+                    //             value: dates[3],
+                    //             scaleID: "x-axis-0",
+                    //             borderColor: "red",
+                    //         }]
+                    // },
+                    legend: {//범례 지정하고싶다면 true
+                        display: true
+                    },
+                }
+
+            });
+
+            const dataLen = myChart.data.datasets[0].data.length;
+            console.log('dataLen is', dataLen);
+            myChart.update();
+        }
 
 
-</script>
-{% endblock %}
+    </script> {% endblock %}
